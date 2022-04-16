@@ -6,17 +6,17 @@ from django.db import models
 
 class Profile(models.Model):
     GENDERS = (
-        ('Male', 'Masculino'),
-        ('Female', 'Feminino'),
-        ('Undefined', None)
+        (0, 'Undefined'),
+        (1, 'Female'),
+        (2, 'Male'),
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    gender = models.CharField(max_length=120, choices=GENDERS, null=True)
+    gender = models.IntegerField(choices=GENDERS, null=True)
     is_verified = models.BooleanField(default=False)
     birth_date = models.DateField()
     email = models.EmailField()
-    picture = models.URLField()
-    banner = models.URLField()
+    picture = models.URLField(null=True, blank=True)
+    banner = models.URLField(null=True, blank=True)
 
 
 class UserFriend(models.Model):
@@ -49,7 +49,7 @@ class GroupMember(models.Model):
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post')
     content = models.TextField(blank=False, null=False)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='group')
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True, related_name='group')
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_created=True, auto_now_add=True)
 
