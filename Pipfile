@@ -13,6 +13,7 @@ djangorestframework-simplejwt = "*"
 requests = "*"
 django-cors-headers = "*"
 python-decouple = "*"
+django-extensions = "*"
 
 [requires]
 python_version = "3.8"
