@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  rush-api:
+    build:
+      context: .
+      target: DevServer
+    container_name: rush-api
+    ports:
+      - "8000:8000"
+    env_file: .env
+    volumes:
+      - .:/code
+    stdin_open: true
+    tty: true
+    restart: always
