@@ -14,6 +14,7 @@ requests = "*"
 django-cors-headers = "*"
 python-decouple = "*"
 django-extensions = "*"
+black = "*"
 
 [requires]
 python_version = "3.8"
