@@ -19,12 +19,6 @@ RUN pipenv install --system --deploy --dev
 COPY . /code/
 
 # =============================================================================
-# CodeFmt - verifica se o código segue o estilo black
-# =============================================================================
-FROM dev AS CodeFmt
-RUN black --check --diff .
-
-# =============================================================================
 # DevServer - Roda o servidor da API em modo de desenvolvimento
 # =============================================================================
 FROM dev as DevServer
