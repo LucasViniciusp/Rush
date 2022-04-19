@@ -5,16 +5,20 @@ from django.db import models
 
 
 class Profile(models.Model):
+    GENDER_UNDEFINED = 0
+    GENDER_FEMALE = 1
+    GENDER_MALE = 2
+
     GENDERS = (
-        (0, 'Undefined'),
-        (1, 'Female'),
-        (2, 'Male'),
+        (GENDER_UNDEFINED, 'Undefined'),
+        (GENDER_FEMALE, 'Female'),
+        (GENDER_MALE, 'Male'),
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    gender = models.IntegerField(choices=GENDERS, null=True)
-    is_verified = models.BooleanField(default=False)
-    birth_date = models.DateField()
-    email = models.EmailField()
+    gender = models.IntegerField(choices=GENDERS, default=GENDER_UNDEFINED)
+    is_verified = models.BooleanField(default=False, null=False)
+    birth_date = models.DateField(null=True)
+    email = models.EmailField(null=False, blank=False)
     picture = models.URLField(null=True, blank=True)
     banner = models.URLField(null=True, blank=True)
 
