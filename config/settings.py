@@ -36,6 +36,8 @@ ALLOWED_HOSTS = dotenv(
     cast=lambda v: [s.strip() for s in v.split(',')],
 )
 
+AUTH_USER_MODEL = 'rush.User'
+
 # Application definition
 
 DJANGO_APPS = [
@@ -164,7 +166,7 @@ LOGGING = {
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
