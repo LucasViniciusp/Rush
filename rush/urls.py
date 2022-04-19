@@ -7,6 +7,7 @@ from rush import views
 
 router = routers.DefaultRouter()
 router.register(r'register', views.RegisterViewSet, basename='user')
+router.register(r'users', views.UserViewSet, basename='user')
 
 urlpatterns = [
     path('', include(router.urls)),
