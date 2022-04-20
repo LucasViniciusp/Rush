@@ -1,13 +1,14 @@
 from rest_framework import serializers
-from rush import models
+from rush.models import User, Post
 
 
 # Create serializers here.
-class RegisterUserSerializer(serializers.ModelSerializer):
-
+class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.User
-        fields = ('username', 'email', 'password', 'first_name', 'last_name', 'birth_date', 'picture', 'banner',)
+        model = User
+        fields = (
+            'username', 'email', 'password', 'first_name', 'last_name', 'birth_date', 'picture', 'banner',
+        )
         extra_kwargs = {
             'password': {'write_only': True},
             'email': {'required': True},
@@ -16,15 +17,16 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        print(validated_data)
-        return self.Meta.model.objects.create_user(**validated_data)
+        return User.objects.create_user(**validated_data)
 
 
 class UserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     class Meta:
-        model = models.User
-        fields = ('id', 'username', 'name', 'first_name', 'last_name', 'birth_date', 'picture', 'banner',)
+        model = User
+        fields = (
+            'id', 'username', 'name', 'first_name', 'last_name', 'birth_date', 'picture', 'banner',
+        )
 
     def get_name(self, obj):
         return obj.get_full_name()
@@ -35,3 +37,14 @@ class UserSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = (
+            'id', 'user', 'group', 'content', 'created_at'
+        )
+        extra_kwargs = {
+            'user': {'read_only': True},
+        }
