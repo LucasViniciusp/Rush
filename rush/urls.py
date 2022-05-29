@@ -10,12 +10,12 @@ from rush import views
 
 
 router = routers.DefaultRouter()
-router.register(r'register', views.RegisterViewSet, basename='user')
-router.register(r'users', views.UserViewSet, basename='user')
-router.register(r'posts', views.PostViewSet, basename='post')
+router.register(r"register", views.RegisterViewSet, basename="user")
+router.register(r"users", views.UserViewSet, basename="user")
+router.register(r"posts", views.PostViewSet, basename="post")
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path("", include(router.urls)),
+    path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
