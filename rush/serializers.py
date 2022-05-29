@@ -7,13 +7,20 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'username', 'email', 'password', 'first_name', 'last_name', 'birth_date', 'picture', 'banner',
+            "username",
+            "email",
+            "password",
+            "first_name",
+            "last_name",
+            "birth_date",
+            "picture",
+            "banner",
         )
         extra_kwargs = {
-            'password': {'write_only': True},
-            'email': {'required': True},
-            'first_name': {'required': True},
-            'last_name': {'required': True},
+            "password": {"write_only": True},
+            "email": {"required": True},
+            "first_name": {"required": True},
+            "last_name": {"required": True},
         }
 
     def create(self, validated_data):
@@ -22,15 +29,23 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = (
-            'id', 'username', 'name', 'first_name', 'last_name', 'birth_date', 'picture', 'banner',
+            "id",
+            "username",
+            "name",
+            "first_name",
+            "last_name",
+            "birth_date",
+            "picture",
+            "banner",
         )
 
     def get_name(self, obj):
         return obj.get_full_name()
-    
+
     def update(self, instance, validated_data):
         for (key, value) in validated_data.items():
             setattr(instance, key, value)
@@ -42,9 +57,7 @@ class UserSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = (
-            'id', 'user', 'group', 'content', 'created_at'
-        )
+        fields = ("id", "user", "group", "content", "created_at")
         extra_kwargs = {
-            'user': {'read_only': True},
+            "user": {"read_only": True},
         }

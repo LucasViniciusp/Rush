@@ -11,50 +11,58 @@ class User(AbstractBaseUser, PermissionsMixin):
     An abstract base class implementing a fully featured User model with
     admin-compliant permissions.
     """
+
     username_validator = UnicodeUsernameValidator()
 
     username = models.CharField(
-        _('username'),
+        _("username"),
         max_length=15,
         unique=True,
-        help_text=_('Required. 15 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        help_text=_(
+            "Required. 15 characters or fewer. Letters, digits and @/./+/-/_ only."
+        ),
         validators=[username_validator],
         error_messages={
-            'unique': _("A user with that username already exists."),
+            "unique": _("A user with that username already exists."),
         },
     )
-    first_name = models.CharField(_('first name'), max_length=40, blank=True)
-    last_name = models.CharField(_('last name'), max_length=120, blank=True)
-    email = models.EmailField(_('email address'), blank=True)
+    first_name = models.CharField(_("first name"), max_length=40, blank=True)
+    last_name = models.CharField(_("last name"), max_length=120, blank=True)
+    email = models.EmailField(_("email address"), blank=True)
     is_staff = models.BooleanField(
-        _('staff status'),
+        _("staff status"),
         default=False,
-        help_text=_('Designates whether the user can log into this admin site.'),
+        help_text=_("Designates whether the user can log into this admin site."),
     )
     is_active = models.BooleanField(
-        _('active'),
+        _("active"),
         default=True,
         help_text=_(
-            'Designates whether this user should be treated as active. '
-            'Unselect this instead of deleting accounts.'
+            "Designates whether this user should be treated as active. "
+            "Unselect this instead of deleting accounts."
         ),
     )
-    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     is_verified = models.BooleanField(default=False, null=False)
     picture = models.URLField(null=True, blank=True)
     banner = models.URLField(null=True, blank=True)
     birth_date = models.DateField(null=True)
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ('first_name', 'last_name', 'email',)
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = (
+        "first_name",
+        "last_name",
+        "email",
+    )
 
     objects = UserManager()
+
     class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
 
     def get_full_name(self):
-        full_name = '%s %s' % (self.first_name, self.last_name)
+        full_name = "%s %s" % (self.first_name, self.last_name)
         return full_name.strip()
 
     def get_short_name(self):
@@ -62,12 +70,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class UserFriend(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="friend")
     friend = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
     created_at = models.DateTimeField(auto_created=True, auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'friend',)
+        unique_together = (
+            "user",
+            "friend",
+        )
 
 
 class Group(models.Model):
@@ -79,24 +90,29 @@ class Group(models.Model):
 
 
 class GroupConfig(models.Model):
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='config')
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="config")
     only_admin_post = models.BooleanField(default=False)
     is_public = models.BooleanField(default=True)
 
 
 class GroupMember(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='group')
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='member')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="group")
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="member")
     is_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_created=True, auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'group',)
+        unique_together = (
+            "user",
+            "group",
+        )
 
 
 class Post(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post')
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True, related_name='group')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="post")
+    group = models.ForeignKey(
+        Group, on_delete=models.CASCADE, null=True, related_name="group"
+    )
     content = models.TextField(blank=False, null=False)
     is_active = models.BooleanField(default=True, blank=False, null=False)
     created_at = models.DateTimeField(auto_created=True, auto_now_add=True)

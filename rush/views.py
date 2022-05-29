@@ -16,27 +16,23 @@ class RegisterViewSet(CreateAPIView, GenericViewSet):
     serializer_class = RegisterSerializer
 
 
-class UserViewSet(mixins.RetrieveModelMixin,
-                  mixins.UpdateModelMixin,
-                  mixins.DestroyModelMixin,
-                  mixins.ListModelMixin,
-                  GenericViewSet):
+class UserViewSet(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (
-        IsAuthenticatedOrReadOnly,
-        UserObjectPermission
-    )
+    permission_classes = (IsAuthenticatedOrReadOnly, UserObjectPermission)
 
 
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = (
-        IsAuthenticatedOrReadOnly,
-        UserObjectPermission
-    )
+    permission_classes = (IsAuthenticatedOrReadOnly, UserObjectPermission)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
