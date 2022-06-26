@@ -13,6 +13,7 @@ router = routers.DefaultRouter()
 router.register(r"register", views.RegisterViewSet, basename="user")
 router.register(r"users", views.UserViewSet, basename="user")
 router.register(r"posts", views.PostViewSet, basename="post")
+router.register(r"groups", views.GroupViewSet, basename="Group")
 
 urlpatterns = [
     path("", include(router.urls)),

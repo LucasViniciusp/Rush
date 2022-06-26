@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rush.models import User, Post
+from rush.models import User, Post, Group
 
 
 # Create serializers here.
@@ -53,3 +53,29 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ("id", "user", "group", "content", "created_at")
         read_only_fields = ["user"]
+
+
+    def get_authenticated_user(self):
+        return self.context["request"].user
+
+    def validate_group(self, group):
+        user = self.get_authenticated_user()
+        if group.member.filter(user=user):
+            return group
+
+        raise serializers.ValidationError("Not a group member!")
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = (
+            "id",
+            "name",
+            "about",
+            "picture",
+            "banner",
+            "only_admin_post",
+            "is_public",
+            "created_at",
+        )
