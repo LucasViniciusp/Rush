@@ -8,9 +8,14 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly,
 )
 
-from rush.serializers import RegisterSerializer, UserSerializer, PostSerializer, GroupSerializer
-from rush.permissions import UserObjectPermission, GroupPermission
 from rush.models import User, Post, Group, GroupMember
+from rush.permissions import UserObjectPermission, GroupPermission
+from rush.serializers import (
+    RegisterSerializer,
+    UserSerializer,
+    PostSerializer,
+    GroupSerializer,
+)
 
 
 # Create your views here.
@@ -29,16 +34,16 @@ class UserViewSet(
 ):
 
     queryset = User.objects.filter(is_active=True)
-    filterset_fields = ('username', 'group')
-    search_fields = ['content']
+    filterset_fields = ("username", "group")
+    search_fields = ["content"]
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, UserObjectPermission)
 
 
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.filter(is_active=True)
-    filterset_fields = ('user', 'group')
-    search_fields = ['content']
+    filterset_fields = ("user", "group")
+    search_fields = ["content"]
     serializer_class = PostSerializer
     permission_classes = (IsAuthenticated, UserObjectPermission)
 
@@ -58,8 +63,8 @@ class PostViewSet(ModelViewSet):
 
 class GroupViewSet(ModelViewSet):
     queryset = Group.objects.all()
-    filterset_fields = ('name', 'is_public', 'only_admin_post')
-    search_fields = ['name', 'about']
+    filterset_fields = ("name", "is_public", "only_admin_post")
+    search_fields = ["name", "about"]
     serializer_class = GroupSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, GroupPermission)
 
@@ -67,7 +72,7 @@ class GroupViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             group = serializer.save()
-            GroupMember.objects.create(group=group, user=request.user, is_admin=True)
-    
+            GroupMember.objects.create(user=request.user, group=group, is_admin=True)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

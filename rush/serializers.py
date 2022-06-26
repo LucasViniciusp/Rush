@@ -54,7 +54,6 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ("id", "user", "group", "content", "created_at")
         read_only_fields = ["user"]
 
-
     def get_authenticated_user(self):
         return self.context["request"].user
 

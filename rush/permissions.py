@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from rush.models import User
+from rush.models import User, GroupMember
 
 
 class UserObjectPermission(permissions.BasePermission):
@@ -23,5 +23,6 @@ class GroupPermission(permissions.BasePermission):
             member = obj.member.get(user=user)
             if member.is_admin:
                 return True
-        except:
+
+        except GroupMember.DoesNotExist:
             return False
