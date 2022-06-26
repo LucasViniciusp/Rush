@@ -2,7 +2,11 @@ from rest_framework import mixins, status
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import (
+    AllowAny,
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+)
 
 from rush.serializers import RegisterSerializer, UserSerializer, PostSerializer
 from rush.permissions import UserObjectPermission
@@ -32,11 +36,12 @@ class UserViewSet(
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly, UserObjectPermission)
+    permission_classes = (IsAuthenticated, UserObjectPermission)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=request.user)
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

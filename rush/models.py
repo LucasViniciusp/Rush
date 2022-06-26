@@ -84,15 +84,11 @@ class UserFriend(models.Model):
 class Group(models.Model):
     name = models.CharField(max_length=240, null=False, blank=False)
     about = models.TextField()
-    picture = models.URLField()
-    banner = models.URLField()
-    created_at = models.DateTimeField(auto_created=True, auto_now_add=True)
-
-
-class GroupConfig(models.Model):
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="config")
+    picture = models.URLField(blank=True, null=True)
+    banner = models.URLField(blank=True, null=True)
     only_admin_post = models.BooleanField(default=False)
     is_public = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_created=True, auto_now_add=True)
 
 
 class GroupMember(models.Model):

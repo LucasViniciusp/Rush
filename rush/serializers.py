@@ -41,23 +41,15 @@ class UserSerializer(serializers.ModelSerializer):
             "birth_date",
             "picture",
             "banner",
+            "date_joined",
         )
 
     def get_name(self, obj):
         return obj.get_full_name()
-
-    def update(self, instance, validated_data):
-        for (key, value) in validated_data.items():
-            setattr(instance, key, value)
-
-        instance.save()
-        return instance
 
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ("id", "user", "group", "content", "created_at")
-        extra_kwargs = {
-            "user": {"read_only": True},
-        }
+        read_only_fields = ["user"]
